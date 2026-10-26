@@ -89,6 +89,12 @@ void Application::connectSettingsAutoSave(KremaSettings *settings, QObject *cont
     connect(settings, &KremaSettings::BackgroundOpacityChanged, context, saveSettings);
     connect(settings, &KremaSettings::BackgroundStyleChanged, context, saveSettings);
     connect(settings, &KremaSettings::TintColorChanged, context, saveSettings);
+    connect(settings, &KremaSettings::GlossyEnabledChanged, context, saveSettings);
+    connect(settings, &KremaSettings::GlossyIntensityChanged, context, saveSettings);
+    connect(settings, &KremaSettings::BorderEnabledChanged, context, saveSettings);
+    connect(settings, &KremaSettings::BorderWidthChanged, context, saveSettings);
+    connect(settings, &KremaSettings::BorderColorChanged, context, saveSettings);
+    connect(settings, &KremaSettings::BorderOpacityChanged, context, saveSettings);
     connect(settings, &KremaSettings::VisibilityModeChanged, context, saveSettings);
     connect(settings, &KremaSettings::EdgeChanged, context, saveSettings);
     connect(settings, &KremaSettings::ShowDelayChanged, context, saveSettings);

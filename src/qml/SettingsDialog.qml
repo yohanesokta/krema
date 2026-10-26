@@ -61,7 +61,8 @@ Kirigami.AbstractApplicationWindow {
             text: i18n("Panel Style"),
             iconName: "preferences-desktop-color",
             group: "",
-            keywords: [i18n("Style"), i18n("Opacity"), i18n("Use system color"), i18n("Use accent color"), i18n("Tint color")]
+            keywords: [i18n("Style"), i18n("Opacity"), i18n("Use system color"), i18n("Use accent color"), i18n("Tint color"),
+                i18n("Glossy"), i18n("Border"), i18n("Border width"), i18n("Border opacity"), i18n("Border color")]
         },
         {
             moduleId: "shadow",

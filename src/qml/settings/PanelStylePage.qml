@@ -228,5 +228,103 @@ SettingsPage {
             checked: DockSettings.useAccentColor
             onToggled: DockSettings.useAccentColor = checked
         }
+
+        FormCard.FormDelegateSeparator {
+            visible: DockSettings.backgroundStyle !== 1
+        }
+
+        // Glossy effect
+        FormCard.FormSwitchDelegate {
+            visible: DockSettings.backgroundStyle !== 1
+            text: i18n("Glossy effect")
+            description: i18n("Add a macOS-style specular gradient to the dock")
+            checked: DockSettings.glossyEnabled
+            onToggled: DockSettings.glossyEnabled = checked
+        }
+
+        FormCard.FormDelegateSeparator {
+            visible: DockSettings.backgroundStyle !== 1 && DockSettings.glossyEnabled
+        }
+
+        SliderDelegate {
+            visible: DockSettings.backgroundStyle !== 1 && DockSettings.glossyEnabled
+            text: i18n("Gloss intensity")
+            from: 5; to: 100; stepSize: 5
+            value: Math.round(DockSettings.glossyIntensity * 100)
+            valueText: i18nc("@label percentage", "%1%", value)
+            onMoved: (value) => DockSettings.glossyIntensity = value / 100
+        }
+    }
+
+    // --- Border ---
+    FormCard.FormHeader {
+        title: i18n("Border")
+    }
+
+    FormCard.FormCard {
+        FormCard.FormSwitchDelegate {
+            text: i18n("Border")
+            description: i18n("Outline the dock panel with a subtle border")
+            checked: DockSettings.borderEnabled
+            onToggled: DockSettings.borderEnabled = checked
+        }
+
+        FormCard.FormDelegateSeparator {
+            visible: DockSettings.borderEnabled
+        }
+
+        SliderDelegate {
+            visible: DockSettings.borderEnabled
+            text: i18n("Border width")
+            from: 1; to: 5; stepSize: 1
+            value: DockSettings.borderWidth
+            valueText: i18nc("@label pixels", "%1 px", value)
+            onMoved: (value) => DockSettings.borderWidth = value
+        }
+
+        FormCard.FormDelegateSeparator {
+            visible: DockSettings.borderEnabled
+        }
+
+        SliderDelegate {
+            visible: DockSettings.borderEnabled
+            text: i18n("Border opacity")
+            from: 5; to: 100; stepSize: 5
+            value: Math.round(DockSettings.borderOpacity * 100)
+            valueText: i18nc("@label percentage", "%1%", value)
+            onMoved: (value) => DockSettings.borderOpacity = value / 100
+        }
+
+        FormCard.FormDelegateSeparator {
+            visible: DockSettings.borderEnabled
+        }
+
+        FormCard.AbstractFormDelegate {
+            id: borderColorDelegate
+            visible: DockSettings.borderEnabled
+            background: null
+            focusPolicy: Qt.NoFocus
+            Accessible.ignored: true
+            onClicked: borderColorSwatch.clicked()
+            contentItem: RowLayout {
+                spacing: Kirigami.Units.smallSpacing
+
+                QQC2.Label {
+                    Layout.fillWidth: true
+                    text: i18n("Border color")
+                    elide: Text.ElideRight
+                    color: borderColorDelegate.enabled ? Kirigami.Theme.textColor : Kirigami.Theme.disabledTextColor
+                    Accessible.ignored: true
+                }
+
+                ColorSwatchButton {
+                    id: borderColorSwatch
+                    accessibleName: i18n("Border color")
+                    dialogTitle: i18n("Choose border color")
+                    color: DockSettings.borderColor
+                    onPicked: (color) => DockSettings.borderColor = color.toString()
+                }
+            }
+        }
     }
 }

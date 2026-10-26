@@ -2004,5 +2004,33 @@ Item {
             compare(PreviewController.visible, false)
             compare(PreviewController.previewKeyboardActive, false)
         }
+
+        function test_glossyAndBorderOverlaysRespondToSettings() {
+            addTasks(["A", "B"])
+            let dock = makeDock(2)
+            let glossy = T.findFirst(dock, o => o.objectName === "glossyOverlay")
+            let border = T.findFirst(dock, o => o.objectName === "dockBorder")
+
+            verify(glossy, "glossyOverlay exists in dockBackground")
+            verify(border, "dockBorder exists in dockBackground")
+
+            // Default: disabled
+            compare(DockSettings.glossyEnabled, false)
+            compare(DockSettings.borderEnabled, false)
+            compare(glossy.visible, false)
+            compare(border.visible, false)
+
+            // Enable glossy
+            DockSettings.glossyEnabled = true
+            DockSettings.glossyIntensity = 0.5
+            compare(glossy.visible, true)
+
+            // Enable border
+            DockSettings.borderEnabled = true
+            DockSettings.borderWidth = 2
+            DockSettings.borderOpacity = 0.4
+            compare(border.visible, true)
+            compare(border.border.width, 2)
+        }
     }
 }

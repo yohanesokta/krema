@@ -1117,6 +1117,52 @@ Item {
                 property real cornerRadius: dockBackground.radius
                 fragmentShader: "qrc:/qml/shaders/acrylic_overlay.frag.qsb"
             }
+
+            // Glossy overlay: specular gradient giving macOS translucent glass depth
+            Rectangle {
+                id: glossyOverlay
+                objectName: "glossyOverlay"
+                anchors.fill: parent
+                radius: dockBackground.radius
+                visible: DockSettings.glossyEnabled && DockSettings.glossyIntensity > 0
+                color: "transparent"
+                readonly property bool _inwardAtEnd: DockView.edge === 0 || DockView.edge === 2
+                gradient: Gradient {
+                    orientation: DockView.isVertical ? Gradient.Horizontal : Gradient.Vertical
+                    GradientStop {
+                        position: 0.0
+                        color: Qt.rgba(1.0, 1.0, 1.0, (glossyOverlay._inwardAtEnd ? 0.0 : 0.45) * DockSettings.glossyIntensity)
+                    }
+                    GradientStop {
+                        position: glossyOverlay._inwardAtEnd ? 0.45 : 0.18
+                        color: Qt.rgba(1.0, 1.0, 1.0, (glossyOverlay._inwardAtEnd ? 0.05 : 0.22) * DockSettings.glossyIntensity)
+                    }
+                    GradientStop {
+                        position: glossyOverlay._inwardAtEnd ? 0.82 : 0.55
+                        color: Qt.rgba(1.0, 1.0, 1.0, (glossyOverlay._inwardAtEnd ? 0.22 : 0.05) * DockSettings.glossyIntensity)
+                    }
+                    GradientStop {
+                        position: 1.0
+                        color: Qt.rgba(1.0, 1.0, 1.0, (glossyOverlay._inwardAtEnd ? 0.45 : 0.0) * DockSettings.glossyIntensity)
+                    }
+                }
+            }
+
+            // Border outline: crisp border around the dock panel (macOS glass rim)
+            Rectangle {
+                id: dockBorder
+                objectName: "dockBorder"
+                anchors.fill: parent
+                radius: dockBackground.radius
+                color: "transparent"
+                visible: DockSettings.borderEnabled && DockSettings.borderWidth > 0 && DockSettings.borderOpacity > 0
+                border.width: DockSettings.borderWidth
+                border.color: {
+                    let hex = DockSettings.borderColor ? DockSettings.borderColor.trim() : ""
+                    let c = (/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(hex)) ? Qt.color(hex) : Qt.color("#ffffff")
+                    return Qt.rgba(c.r, c.g, c.b, DockSettings.borderOpacity)
+                }
+            }
         }
 
         // Delay enabling animations until after initial layout to avoid startup flicker

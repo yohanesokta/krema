@@ -52,6 +52,12 @@ Item {
     property bool useAccentColor: DockSettings.useAccentColor
     property bool useSystemColor: DockSettings.useSystemColor
     property color tintColor: DockSettings.tintColor
+    property bool glossyEnabled: DockSettings.glossyEnabled
+    property real glossyIntensity: DockSettings.glossyIntensity
+    property bool borderEnabled: DockSettings.borderEnabled
+    property int borderWidth: DockSettings.borderWidth
+    property color borderColor: DockSettings.borderColor
+    property real borderOpacity: DockSettings.borderOpacity
     property real opacityActive: DockSettings.iconOpacityActive
     property real opacityInactive: DockSettings.iconOpacityInactive
     property real opacityMinimized: DockSettings.iconOpacityMinimized
@@ -321,6 +327,52 @@ Item {
             property real resY: height
             property real cornerRadius: background.radius
             fragmentShader: "qrc:/qml/shaders/acrylic_overlay.frag.qsb"
+        }
+
+        // Glossy sheen overlay
+        Rectangle {
+            id: glossyOverlay
+            objectName: "miniDockGlossyOverlay"
+            anchors.fill: parent
+            radius: background.radius
+            visible: dock.glossyEnabled && dock.glossyIntensity > 0
+            color: "transparent"
+            readonly property bool _inwardAtEnd: dock.edge === 0 || dock.edge === 2
+            gradient: Gradient {
+                orientation: dock.vertical ? Gradient.Horizontal : Gradient.Vertical
+                GradientStop {
+                    position: 0.0
+                    color: Qt.rgba(1.0, 1.0, 1.0, (glossyOverlay._inwardAtEnd ? 0.0 : 0.45) * dock.glossyIntensity)
+                }
+                GradientStop {
+                    position: glossyOverlay._inwardAtEnd ? 0.45 : 0.18
+                    color: Qt.rgba(1.0, 1.0, 1.0, (glossyOverlay._inwardAtEnd ? 0.05 : 0.22) * dock.glossyIntensity)
+                }
+                GradientStop {
+                    position: glossyOverlay._inwardAtEnd ? 0.82 : 0.55
+                    color: Qt.rgba(1.0, 1.0, 1.0, (glossyOverlay._inwardAtEnd ? 0.22 : 0.05) * dock.glossyIntensity)
+                }
+                GradientStop {
+                    position: 1.0
+                    color: Qt.rgba(1.0, 1.0, 1.0, (glossyOverlay._inwardAtEnd ? 0.45 : 0.0) * dock.glossyIntensity)
+                }
+            }
+        }
+
+        // Border outline
+        Rectangle {
+            id: dockBorder
+            objectName: "miniDockBorder"
+            anchors.fill: parent
+            radius: background.radius
+            color: "transparent"
+            visible: dock.borderEnabled && dock.borderWidth > 0 && dock.borderOpacity > 0
+            border.width: Math.max(1, Math.round(dock.borderWidth * dock.unit))
+            border.color: {
+                let hex = dock.borderColor ? dock.borderColor.toString().trim() : ""
+                let c = (/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(hex)) ? Qt.color(hex) : Qt.color("#ffffff")
+                return Qt.rgba(c.r, c.g, c.b, dock.borderOpacity)
+            }
         }
     }
 

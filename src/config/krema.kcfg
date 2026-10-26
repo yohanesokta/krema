@@ -193,6 +193,42 @@
       <default>#1e3a5f</default>
     </entry>
 
+    <entry name="GlossyEnabled" type="Bool">
+      <label>Enable glossy specular sheen effect on dock background</label>
+      <default>false</default>
+    </entry>
+
+    <entry name="GlossyIntensity" type="Double">
+      <label>Intensity of glossy sheen effect</label>
+      <default>0.3</default>
+      <min>0.0</min>
+      <max>1.0</max>
+    </entry>
+
+    <entry name="BorderEnabled" type="Bool">
+      <label>Enable border outline on dock background</label>
+      <default>false</default>
+    </entry>
+
+    <entry name="BorderWidth" type="Int">
+      <label>Border outline width in pixels</label>
+      <default>1</default>
+      <min>1</min>
+      <max>5</max>
+    </entry>
+
+    <entry name="BorderColor" type="String">
+      <label>Border outline color (hex RGB)</label>
+      <default>#ffffff</default>
+    </entry>
+
+    <entry name="BorderOpacity" type="Double">
+      <label>Border outline opacity</label>
+      <default>0.3</default>
+      <min>0.0</min>
+      <max>1.0</max>
+    </entry>
+
     <entry name="ShadowEnabled" type="Bool">
       <label>Enable drop shadow behind the dock panel</label>
       <default>false</default>

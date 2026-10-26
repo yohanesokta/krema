@@ -113,6 +113,43 @@ TEST_CASE("KremaSettings badge defaults and bounds", "[settings]")
     CHECK(settings.badgePosition() == 2);
 }
 
+TEST_CASE("KremaSettings glossy and border defaults and bounds", "[settings]")
+{
+    const ScopedConfigHome home;
+    KremaSettings settings;
+
+    // Defaults
+    CHECK_FALSE(settings.glossyEnabled());
+    CHECK(settings.glossyIntensity() == 0.3);
+    CHECK_FALSE(settings.borderEnabled());
+    CHECK(settings.borderWidth() == 1);
+    CHECK(settings.borderColor() == QStringLiteral("#ffffff"));
+    CHECK(settings.borderOpacity() == 0.3);
+
+    // Bounds check on BorderWidth
+    const auto *borderWidthItem = settings.findItem(QStringLiteral("BorderWidth"));
+    REQUIRE(borderWidthItem);
+    CHECK(borderWidthItem->minValue().toInt() == 1);
+    CHECK(borderWidthItem->maxValue().toInt() == 5);
+
+    settings.setBorderWidth(0);
+    CHECK(settings.borderWidth() == 1);
+    settings.setBorderWidth(10);
+    CHECK(settings.borderWidth() == 5);
+
+    // Bounds check on GlossyIntensity
+    const auto *glossyIntensityItem = settings.findItem(QStringLiteral("GlossyIntensity"));
+    REQUIRE(glossyIntensityItem);
+    CHECK(glossyIntensityItem->minValue().toDouble() == 0.0);
+    CHECK(glossyIntensityItem->maxValue().toDouble() == 1.0);
+
+    // Bounds check on BorderOpacity
+    const auto *borderOpacityItem = settings.findItem(QStringLiteral("BorderOpacity"));
+    REQUIRE(borderOpacityItem);
+    CHECK(borderOpacityItem->minValue().toDouble() == 0.0);
+    CHECK(borderOpacityItem->maxValue().toDouble() == 1.0);
+}
+
 TEST_CASE("Changing any single setting persists it across a restart", "[settings]")
 {
     // Item names come from the schema, so entries added to krema.kcfg later

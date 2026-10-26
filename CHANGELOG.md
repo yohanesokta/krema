@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Added configurable top and bottom dock padding settings ("Top padding" and "Bottom padding" in Settings → Layout & Position), allowing users to adjust the gaps between the icons and the dock borders (0–32 px).
 - Added macOS-style glossy background and border settings (Settings → Panel Style), featuring an adjustable glossy specular gradient and a customizable border outline with width, opacity, and color choices.
 - Added live SNI metadata for dock items: attention and overlay icon names are shown from the app's StatusNotifierItem, and SNI tooltip title/subtitle text is exposed to accessibility while canonical identity matching and generation checks prevent stale tray data.
 - Added Ubuntu 26.10 to the OBS packaging targets for x86_64 and aarch64 (#99)
@@ -23,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- Fixed a bug where a floating dock configured with small margins (such as 1 px) or disabled floating stayed elevated high above the screen edge due to outward drop shadow reservation.
+- Allowed setting the floating margin down to 0 px for docks resting flush against the screen edge.
 - Dock shadows no longer clipped at low light heights, and window previews followed the panel's shadow inset on every dock edge and stayed interactive after live shadow changes (#118)
 - Kept icons fully visible while a zoomed dock icon bounced during launch or attention animations
 - Kept window previews open while the pointer crossed the enlarged zoom and bounce reserve between the dock and preview

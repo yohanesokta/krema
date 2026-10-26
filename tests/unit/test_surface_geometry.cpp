@@ -37,14 +37,14 @@ TEST_CASE("Surface geometry calculations", "[geometry]")
     {
         const int overflow = krema::shadowOverflowHeight(64, -150, 100, 15, 5.0);
         REQUIRE(overflow >= 60);
-        REQUIRE(krema::surfaceHeight(48, 8, 1.6, 36, 8, overflow) == 184);
+        REQUIRE(krema::surfaceHeight(48, 8, 1.6, 36, 8, overflow) == 64 + overflow + 8);
     }
 
-    SECTION("Shadow overflow is reserved on both surface sides")
+    SECTION("Outward side follows floating padding without shadow displacement")
     {
         const int overflow = krema::shadowOverflowHeight(64, -150, 100, 15, 5.0);
         const int surface = krema::surfaceHeight(48, 8, 1.6, 36, 0, overflow);
-        REQUIRE(surface - (48 + 8 * 2) >= overflow * 2);
+        REQUIRE(surface == (48 + 8 * 2) + overflow + 0);
         REQUIRE(overflow >= 60);
     }
 
@@ -52,20 +52,26 @@ TEST_CASE("Surface geometry calculations", "[geometry]")
     {
         const int shadow = krema::shadowOverflowHeight(64, -150, 100, 15, 5.0);
         // With 2x zoom the 76 px bounce reserve exceeds the 60 px shadow.
-        // The outward side still needs the full shadow reserve.
-        REQUIRE(krema::surfaceHeight(48, 8, 2.0, 36, 0, shadow) == 200);
-        // A larger floating gap wins only on the outward side.
+        // The outward side follows floatingPadding (0).
+        REQUIRE(krema::surfaceHeight(48, 8, 2.0, 36, 0, shadow) == 140);
+        // A larger floating gap reflects on the outward side.
         REQUIRE(krema::surfaceHeight(48, 8, 2.0, 36, 100, shadow) == 240);
-        // A tooltip wider than either reserve wins only on the inward side.
-        REQUIRE(krema::surfaceHeight(48, 8, 2.0, 90, 0, shadow) == 214);
+        // A tooltip wider than either reserve wins on the inward side.
+        REQUIRE(krema::surfaceHeight(48, 8, 2.0, 90, 0, shadow) == 154);
     }
 
-    SECTION("Screen reservation follows the inset panel edge")
+    SECTION("Screen reservation follows the panel edge")
     {
         const int overflow = krema::shadowOverflowHeight(64, -150, 100, 15, 5.0);
-        REQUIRE(krema::screenReserveDepth(48, 8, 0, overflow, 0) == 124);
-        REQUIRE(krema::screenReserveDepth(48, 8, 8, overflow, 0) == 124);
+        REQUIRE(krema::screenReserveDepth(48, 8, 0, overflow, 0) == 64);
+        REQUIRE(krema::screenReserveDepth(48, 8, 8, overflow, 0) == 72);
         REQUIRE(krema::screenReserveDepth(48, 8, 8, 0, 0) == 72);
+    }
+
+    SECTION("Asymmetric top and bottom padding")
+    {
+        int h = krema::surfaceHeight(48, 4, 6, 1.0, 0, 1);
+        REQUIRE(h == 69);
     }
 
     SECTION("Shadow overflow is not capped for valid extreme settings")

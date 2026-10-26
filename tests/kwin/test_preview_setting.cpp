@@ -386,7 +386,7 @@ TEST_CASE("Preview margins follow the shadow-inset panel on every edge", "[previ
                 }
                 // QML publishes its panel rectangle asynchronously. Do not accept
                 // the previous rectangle and margin immediately after a toggle.
-                if (std::abs(gap - std::max(dock->floatingPadding(), dock->shadowOverflow())) > 4) {
+                if (std::abs(gap - dock->floatingPadding()) > 4) {
                     return false;
                 }
                 // QML's visible background omits the 4 px indicator gap.

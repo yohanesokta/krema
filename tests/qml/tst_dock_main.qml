@@ -252,7 +252,7 @@ Item {
 
         function test_shadowReserveKeepsOutwardEdgeInsideSurface(data) {
             DockView.edge = data.edge
-            DockView.floatingPadding = 0
+            DockView.floatingPadding = 1
             DockView.shadowOverflow = 60
             addTasks(["A", "B"])
             makeDock(2)
@@ -264,8 +264,18 @@ Item {
                     : data.edge === 2
                         ? panel.x
                         : stage.width - panel.x - panel.width
-            verify(outwardGap >= DockView.shadowOverflow,
-                   data.tag + " outward gap was " + outwardGap)
+            compare(outwardGap, 1,
+                    data.tag + " outward gap must follow floatingPadding, was " + outwardGap)
+        }
+
+        function test_panelPaddingTopAndBottomAffectsPanelGeometry() {
+            DockView.edge = 1
+            DockSettings.panelPaddingTop = 4
+            DockSettings.panelPaddingBottom = 6
+            addTasks(["A", "B"])
+            let dock = makeDock(2)
+            let panel = items(dock)[0].parent.parent
+            compare(panel.height, 48 + 4 + 6)
         }
 
         function test_verticalDockStacksItems() {

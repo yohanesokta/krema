@@ -129,6 +129,8 @@ void DockShell::connectSettingsSignals()
     // Floating margin is global-only; it resizes the gap exactly like toggling floating.
     connect(s, &KremaSettings::FloatingMarginChanged, m_view.get(), &DockView::refreshFloatingPadding);
     connect(s, &KremaSettings::FloatingMarginReferenceChanged, m_view.get(), &DockView::applyMarginReference);
+    connect(s, &KremaSettings::PanelPaddingTopChanged, m_view.get(), &DockView::updateSize);
+    connect(s, &KremaSettings::PanelPaddingBottomChanged, m_view.get(), &DockView::updateSize);
 
     // Screen-space reservation is global; reflow both the dock and open preview.
     connect(s, &KremaSettings::ReserveScreenSpaceChanged, this, [this]() {

@@ -151,13 +151,15 @@ Item {
     readonly property Item floatingMarker: floatingMarkerItem
 
     // Geometry in preview pixels. Padding and floating margin mirror
-    // main.qml (largeSpacing around the icons) and DockView::floatingPadding.
+    // main.qml and DockView::floatingPadding.
     readonly property real iconPx: iconSize * unit
     readonly property real gapPx: iconSpacing * unit
-    readonly property real padPx: Kirigami.Units.largeSpacing * unit
+    readonly property real padTopPx: DockSettings.panelPaddingTop * unit
+    readonly property real padBottomPx: DockSettings.panelPaddingBottom * unit
+    readonly property real padPx: padTopPx
     readonly property real floatPx: floating ? floatingMargin * unit : 0
     readonly property real pitch: iconPx + gapPx
-    readonly property real thickness: iconPx + 2 * padPx
+    readonly property real thickness: iconPx + padTopPx + padBottomPx
     readonly property real length: restLengthReal * unit
     readonly property real restContentLength: count * iconPx + Math.max(0, count - 1) * gapPx
     readonly property real restStart: (length - restContentLength) / 2
@@ -382,8 +384,8 @@ Item {
     // the leading edge of the first icon). Zoom moves each slot explicitly.
     Item {
         id: row
-        x: dock.vertical ? dock.padPx : dock.restStart
-        y: dock.vertical ? dock.restStart : dock.padPx
+        x: dock.vertical ? dock.padTopPx : dock.restStart
+        y: dock.vertical ? dock.restStart : dock.padTopPx
 
         Repeater {
             id: repeater

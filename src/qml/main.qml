@@ -1032,18 +1032,17 @@ Item {
 
         // Panel size: primary axis stretches to content, secondary axis = icon + padding
         width: DockView.isVertical
-            ? (DockSettings.iconSize + Kirigami.Units.largeSpacing * 2)
+            ? (DockSettings.iconSize + DockSettings.panelPaddingTop + DockSettings.panelPaddingBottom)
             : Math.max(dockRow.implicitWidth + root.taskZoneGap + Kirigami.Units.largeSpacing * 2, Kirigami.Units.gridUnit * 6)
         height: DockView.isVertical
             ? Math.max(dockRow.implicitHeight + root.taskZoneGap + Kirigami.Units.largeSpacing * 2, Kirigami.Units.gridUnit * 6)
-            : (DockSettings.iconSize + Kirigami.Units.largeSpacing * 2)
+            : (DockSettings.iconSize + DockSettings.panelPaddingTop + DockSettings.panelPaddingBottom)
         color: "transparent"
 
         // Rest slot coordinates stay at the visible panel position even
         // while the actual panel is slid off-screen for AutoHide/Dodge.
         readonly property real restEdgePos: {
-            // Keep the outward shadow edge inside the layer-shell surface.
-            let fp = Math.max(DockView.floatingPadding, DockView.shadowOverflow)
+            let fp = DockView.floatingPadding
             switch (DockView.edge) {
             case 0: // Top
                 return fp
@@ -1373,19 +1372,19 @@ Item {
                 if (!DockView.isVertical) {
                     return (parent.width - animatedContentWidth) / 2
                 }
-                let indicatorSpace = 4 + Kirigami.Units.smallSpacing
+                let indicatorSpace = (DockView.edge === 2) ? DockSettings.panelPaddingTop : DockSettings.panelPaddingBottom
                 return (DockView.edge === 2)
-                    ? Kirigami.Units.largeSpacing - indicatorSpace
-                    : Kirigami.Units.largeSpacing
+                    ? DockSettings.panelPaddingTop - indicatorSpace
+                    : DockSettings.panelPaddingTop
             }
             y: {
                 if (DockView.isVertical) {
                     return (parent.height - animatedContentHeight) / 2
                 }
-                let indicatorSpace = 4 + Kirigami.Units.smallSpacing
+                let indicatorSpace = (DockView.edge === 0) ? DockSettings.panelPaddingTop : DockSettings.panelPaddingBottom
                 return (DockView.edge === 0)
-                    ? Kirigami.Units.largeSpacing - indicatorSpace
-                    : Kirigami.Units.largeSpacing
+                    ? DockSettings.panelPaddingTop - indicatorSpace
+                    : DockSettings.panelPaddingTop
             }
 
             // Animate existing items displaced by add/remove within the Flow.

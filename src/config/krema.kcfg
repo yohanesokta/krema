@@ -117,7 +117,7 @@
     <entry name="FloatingMargin" type="Int">
       <label>Gap between the floating dock and the edge it is measured from (px)</label>
       <default>8</default>
-      <min>1</min>
+      <min>0</min>
       <max>128</max>
     </entry>
 
@@ -126,6 +126,20 @@
       <default>1</default>
       <min>0</min>
       <max>1</max>
+    </entry>
+
+    <entry name="PanelPaddingTop" type="Int">
+      <label>Top padding between icons and dock panel edge (px)</label>
+      <default>8</default>
+      <min>0</min>
+      <max>32</max>
+    </entry>
+
+    <entry name="PanelPaddingBottom" type="Int">
+      <label>Bottom padding between icons and dock panel edge (px)</label>
+      <default>8</default>
+      <min>0</min>
+      <max>32</max>
     </entry>
 
     <entry name="VisibilityMode" type="Int">

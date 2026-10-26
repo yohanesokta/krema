@@ -90,6 +90,10 @@ public:
     /// Outward visual extent needed by zoomed and bouncing icons.
     Q_INVOKABLE int animationOverflowHeight() const;
 
+    [[nodiscard]] int panelPaddingTop() const;
+    [[nodiscard]] int panelPaddingBottom() const;
+    [[nodiscard]] int panelPaddingTotal() const;
+
     /// Depth of the space other always-visible panels reserve on the dock's
     /// edge while the gap is measured from panels; 0 otherwise.
     [[nodiscard]] int reservedPanelInset() const;

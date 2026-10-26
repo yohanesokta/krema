@@ -469,7 +469,9 @@ Item {
 
     // Fixed space reserved for indicator dots (max dot size + spacing).
     // Always reserve this space so icon position stays stable when dots appear/disappear.
-    readonly property int _indicatorSpace: 4 + Kirigami.Units.smallSpacing
+    readonly property int _indicatorSpace: (DockView.edge === 0 || DockView.edge === 2)
+        ? DockSettings.panelPaddingTop
+        : DockSettings.panelPaddingBottom
 
     // Size: base icon size + fixed indicator space (toward screen edge)
     width: DockView.isVertical
@@ -1016,7 +1018,7 @@ Item {
 
         // Margin compensation for icon padding from iconScale
         property real _iconPaddingCompensation: iconImage.height * (1.0 - DockSettings.iconScale) / 2.0
-        readonly property real _dotSecondaryMargin: Math.round((dockItem._indicatorSpace - (dockItem.model.IsActive ? 4 : 3)) / 2)
+        readonly property real _dotSecondaryMargin: Math.max(0, Math.round((dockItem._indicatorSpace - (dockItem.model.IsActive ? 4 : 3)) / 2))
 
         states: [
             State {

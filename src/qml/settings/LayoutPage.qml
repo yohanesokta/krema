@@ -261,7 +261,7 @@ SettingsPage {
             text: i18n("Floating margin")
             description: i18n("Gap between the dock and the screen edge or panel")
             enabled: DockSettings.floating
-            from: 1
+            from: 0
             to: 128
             stepSize: 1
             value: DockSettings.floatingMargin
@@ -280,6 +280,34 @@ SettingsPage {
             value: DockSettings.cornerRadius
             valueText: i18nc("@label pixels", "%1 px", value)
             onMoved: (value) => DockSettings.cornerRadius = Math.round(value)
+        }
+
+        FormCard.FormDelegateSeparator {}
+
+        SliderDelegate {
+            id: topPaddingSlider
+            text: i18n("Top padding")
+            description: i18n("Gap between icons and the top edge of the dock")
+            from: 0
+            to: 32
+            stepSize: 1
+            value: DockSettings.panelPaddingTop
+            valueText: i18nc("@label pixels", "%1 px", value)
+            onMoved: (value) => DockSettings.panelPaddingTop = Math.round(value)
+        }
+
+        FormCard.FormDelegateSeparator {}
+
+        SliderDelegate {
+            id: bottomPaddingSlider
+            text: i18n("Bottom padding")
+            description: i18n("Gap between icons and the bottom edge of the dock")
+            from: 0
+            to: 32
+            stepSize: 1
+            value: DockSettings.panelPaddingBottom
+            valueText: i18nc("@label pixels", "%1 px", value)
+            onMoved: (value) => DockSettings.panelPaddingBottom = Math.round(value)
         }
     }
 }

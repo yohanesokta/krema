@@ -148,6 +148,19 @@ TEST_CASE("KremaSettings glossy and border defaults and bounds", "[settings]")
     REQUIRE(borderOpacityItem);
     CHECK(borderOpacityItem->minValue().toDouble() == 0.0);
     CHECK(borderOpacityItem->maxValue().toDouble() == 1.0);
+
+    // Defaults and bounds check on PanelPaddingTop and PanelPaddingBottom
+    CHECK(settings.panelPaddingTop() == 8);
+    CHECK(settings.panelPaddingBottom() == 8);
+    const auto *paddingTopItem = settings.findItem(QStringLiteral("PanelPaddingTop"));
+    REQUIRE(paddingTopItem);
+    CHECK(paddingTopItem->minValue().toInt() == 0);
+    CHECK(paddingTopItem->maxValue().toInt() == 32);
+
+    const auto *paddingBottomItem = settings.findItem(QStringLiteral("PanelPaddingBottom"));
+    REQUIRE(paddingBottomItem);
+    CHECK(paddingBottomItem->minValue().toInt() == 0);
+    CHECK(paddingBottomItem->maxValue().toInt() == 32);
 }
 
 TEST_CASE("Changing any single setting persists it across a restart", "[settings]")

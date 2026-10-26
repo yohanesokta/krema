@@ -46,31 +46,45 @@ inline int animationOverflowHeight(int iconSize, int padding, double maxZoomFact
 }
 
 /// Total surface height including dock, inward animation / tooltip / shadow reserve,
-/// outward shadow / floating reserve, and the dock content.
-inline int surfaceHeight(int iconSize, int padding, double maxZoomFactor, int tooltipReserve, int floatingPadding, int shadowOverflow = 0)
+/// outward floating reserve, and the dock content.
+inline int surfaceHeight(int iconSize, int paddingTop, int paddingBottom, double maxZoomFactor, int tooltipReserve, int floatingPadding, int shadowOverflow = 0)
 {
-    const int dockHeight = iconSize + padding * 2;
-    const int overflow = animationOverflowHeight(iconSize, padding, maxZoomFactor);
+    const int dockHeight = iconSize + paddingTop + paddingBottom;
+    const int overflow = animationOverflowHeight(iconSize, paddingTop, maxZoomFactor);
 
     const int topOverflow = std::max({overflow, tooltipReserve, shadowOverflow});
-    // The shader effect is symmetric around the panel. Keep equivalent room
-    // on the outward side so any light direction remains inside the surface.
-    const int bottomOverflow = std::max(floatingPadding, shadowOverflow);
+    const int bottomOverflow = floatingPadding;
 
     return dockHeight + topOverflow + bottomOverflow;
 }
 
-/// Height of the visible panel bar (icon + padding + floating gap).
-inline int panelBarHeight(int iconSize, int padding, int floatingPadding)
+inline int surfaceHeight(int iconSize, int padding, double maxZoomFactor, int tooltipReserve, int floatingPadding, int shadowOverflow = 0)
 {
-    return iconSize + padding * 2 + floatingPadding;
+    return surfaceHeight(iconSize, padding, padding, maxZoomFactor, tooltipReserve, floatingPadding, shadowOverflow);
 }
 
-/// Screen-space reservation needed when the panel is inset for shadow overflow.
+/// Height of the visible panel bar (icon + padding + floating gap).
+inline int panelBarHeight(int iconSize, int paddingTop, int paddingBottom, int floatingPadding)
+{
+    return iconSize + paddingTop + paddingBottom + floatingPadding;
+}
+
+inline int panelBarHeight(int iconSize, int padding, int floatingPadding)
+{
+    return panelBarHeight(iconSize, padding, padding, floatingPadding);
+}
+
+/// Screen-space reservation needed when the panel is placed at floatingPadding.
+inline int screenReserveDepth(int iconSize, int paddingTop, int paddingBottom, int floatingPadding, int shadowOverflow, int reservedInset)
+{
+    (void)shadowOverflow;
+    const int panelEdgeOffset = floatingPadding;
+    return iconSize + paddingTop + paddingBottom + panelEdgeOffset - reservedInset;
+}
+
 inline int screenReserveDepth(int iconSize, int padding, int floatingPadding, int shadowOverflow, int reservedInset)
 {
-    const int panelEdgeOffset = std::max(floatingPadding, shadowOverflow);
-    return iconSize + padding * 2 + panelEdgeOffset - reservedInset;
+    return screenReserveDepth(iconSize, padding, padding, floatingPadding, shadowOverflow, reservedInset);
 }
 
 } // namespace krema
